@@ -48,13 +48,23 @@ function main() {
     </script>
     <script>
       var tto_date = new Date().getTime() - 2592000000
-var ffrom_date = tto_date - 2592000000 - 2592000000
-tto_date = new Date(tto_date).toISOString().substr(0, 10)
-ffrom_date = new Date(ffrom_date).toISOString().substr(0, 10)
+var ffrom_date = tto_date - 5.184e+9
+// tto_date = new Date(tto_date).toISOString().substr(0, 10)
+// ffrom_date = new Date(ffrom_date).toISOString().substr(0, 10)
 
 var script_two = document.getElementById('query_to_run').innerHTML;
-MP.api.jql(script_two, {from_date: ffrom_date, to_date:tto_date}).done(function(results) {
-    console.log(results)});
+var listt = []
+for(var i = 0; i< 30; i++){
+tto_date = tto_date +  8.64e+7
+ffrom_date = ffrom_date + 8.64e+7
+ttto_date = new Date(tto_date).toISOString().substr(0, 10)
+fffrom_date = new Date(ffrom_date).toISOString().substr(0, 10)
+MP.api.jql(script_two, {from_date: fffrom_date, to_date:ttto_date}).done(function(results) {
+  console.log(results)
+  listt.push(results)
+  
+});
+}
  </script>
   </body>
 </html>
