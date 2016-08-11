@@ -36,7 +36,9 @@ function main() {
   })
   .map(function(item){
     // return {"DAU": item.DAU/30, "MAU": item.MAU, "DAU/MAU": (item.DAU/30)/(item.MAU), "Stickiness": (item.DAU/30)/(item.MAU)*100}
-    return (item.DAU/30)/(item.MAU)*100
+    var obj = {}
+    obj[params.to_date] =  (item.DAU/30)/(item.MAU)*100
+    return obj
     
     //DAU: Daily active count / 30 days
     //MAU: total MAU over 30 days
@@ -53,18 +55,20 @@ var ffrom_date = tto_date - 5.184e+9
 // ffrom_date = new Date(ffrom_date).toISOString().substr(0, 10)
 
 var script_two = document.getElementById('query_to_run').innerHTML;
-var listt = []
+var list = []
 for(var i = 0; i< 30; i++){
 tto_date = tto_date +  8.64e+7
 ffrom_date = ffrom_date + 8.64e+7
 ttto_date = new Date(tto_date).toISOString().substr(0, 10)
 fffrom_date = new Date(ffrom_date).toISOString().substr(0, 10)
+
 MP.api.jql(script_two, {from_date: fffrom_date, to_date:ttto_date}).done(function(results) {
+  list.push(results)
   console.log(results)
-  listt.push(results)
   
 });
 }
+console.log(list)
  </script>
   </body>
 </html>
