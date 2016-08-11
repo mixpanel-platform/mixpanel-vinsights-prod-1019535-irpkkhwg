@@ -8,8 +8,53 @@
   </head>
   <body class="mixpanel-platform-body">
     <h1>Hello, World!</h1>
-    <script>
+    <script id = "query_to_run">
+
+function getDay(event){
+  return Number(new Date(event.time).toISOString().substr(8, 2)) //returns date (number of month)
+}
+
+function main() {
+  return Events({
+    from_date: params.from_date, //adjust to isoformatted date for custom range (i.e. 2016-07-10)
+    to_date: params.to_date //adjust to isoformatted date for custom range (i.e. 2016-08-10)
+  })
+  .groupByUser([getDay], mixpanel.reducer.count()) //returns distinct_id's + date (number) that they existed
+  .groupBy(["key.0"], mixpanel.reducer.count()) //groups by user and includes count of days that they existed
+  // .reduce(mixpanel.reducer.count())
+  .reduce(function(accums, items){
+    var obj = obj || {MAU: 0, DAU: 0}
+    _.each(items, function(item){
+      obj.MAU +=1
+      obj.DAU += item.value
+    })
+    _.each(accums, function(accum){
+      obj.MAU += accum.MAU
+      obj.DAU += accum.DAU
+    })
+    return obj //total DAU over 30 days, total MAU over thirty days
+  })
+  .map(function(item){
+    // return {"DAU": item.DAU/30, "MAU": item.MAU, "DAU/MAU": (item.DAU/30)/(item.MAU), "Stickiness": (item.DAU/30)/(item.MAU)*100}
+    return (item.DAU/30)/(item.MAU)*100
+    
+    //DAU: Daily active count / 30 days
+    //MAU: total MAU over 30 days
+    //DAU/MAU : ratio
+    //Stickiness: DAU/MAU * 100
+  })
+}
       // Run queries and display results here
     </script>
+    <script>
+      var tto_date = new Date().getTime() - 2592000000
+var ffrom_date = tto_date - 2592000000 - 2592000000
+tto_date = new Date(tto_date).toISOString().substr(0, 10)
+ffrom_date = new Date(ffrom_date).toISOString().substr(0, 10)
+
+var script_two = document.getElementById('query_to_run').innerHTML;
+MP.api.jql(script_two, {from_date: ffrom_date, to_date:tto_date}).done(function(results) {
+    console.log(results)});
+ </script>
   </body>
 </html>
