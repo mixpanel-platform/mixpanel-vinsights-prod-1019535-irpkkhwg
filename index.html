@@ -7,7 +7,7 @@
     <script src="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.js"></script>
   </head>
   <body class="mixpanel-platform-body">
-    <h1>Hello, World!</h1>
+    <button id = "yo">DONE BUTTON</button>
     <script id = "query_to_run">
 
 function getDay(event){
@@ -55,7 +55,8 @@ var ffrom_date = tto_date - 5.184e+9
 // ffrom_date = new Date(ffrom_date).toISOString().substr(0, 10)
 
 var script_two = document.getElementById('query_to_run').innerHTML;
-var list = []
+var list = [];
+var done = false;
 for(var i = 0; i< 30; i++){
 tto_date = tto_date +  8.64e+7
 ffrom_date = ffrom_date + 8.64e+7
@@ -65,10 +66,14 @@ fffrom_date = new Date(ffrom_date).toISOString().substr(0, 10)
 MP.api.jql(script_two, {from_date: fffrom_date, to_date:ttto_date}).done(function(results) {
   list.push(results)
   console.log(results)
-  
 });
 }
-console.log(list)
+   $("#yo").click(function(){
+     console.log(list)
+   })
+ </script>
+ <script>
+
  </script>
   </body>
 </html>
